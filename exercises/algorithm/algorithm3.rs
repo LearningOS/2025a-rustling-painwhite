@@ -3,10 +3,49 @@
 	This problem requires you to implement a sorting algorithm
 	you can use bubble sorting, insertion sorting, heap sorting, etc.
 */
-// I AM NOT DONE
 
-fn sort<T>(array: &mut [T]){
+fn sort<T>(array: &mut [T])
+where
+    T: PartialOrd,
+{
 	//TODO
+    if array.len() <= 1 {
+        return;
+    }
+    
+    let pivot_index = partition(array);
+    
+    let (left, right) = array.split_at_mut(pivot_index);
+    sort(left);
+    
+    // 注意：pivot_index 位置的元素是基准值
+    let right = &mut array[pivot_index + 1..];
+    sort(right);
+}
+fn partition<T>(array: &mut [T]) -> usize 
+where
+    T: PartialOrd,
+{
+    let len = array.len();
+    if len <= 1 {
+        return 0;
+    }
+    
+    // 将最后一个元素作为基准值
+    let pivot_index = len - 1;
+    let mut i = 0;
+    
+    for j in 0..pivot_index {
+        if array[j] <= array[pivot_index] {
+            array.swap(i, j);
+            i += 1;
+        }
+    }
+    
+    // 将基准值放到正确位置
+    array.swap(i, pivot_index);
+    
+    i
 }
 #[cfg(test)]
 mod tests {
